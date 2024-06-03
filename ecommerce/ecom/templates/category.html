@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+  {% if category %}
+    {{ category.description|truncatewords:155 }}
+  {% else %}
+    Welcome to our store where you can buy items.
+  {% endif %}
+{% endblock %}
+
+{% block title %}
+  {% if category %}
+    {{ category.name }} - A store
+  {% else %}
+    See our new collections
+  {% endif %}
+{% endblock %}
+
+{% block content %}
+  {% if category %}
+    <div>
+      <div>
+        <p><a href="{% url 'ecomapp:allProductCat' %}">Our Product Collections</a></p>
+      </div>
+    </div>
+    <div>
+      <img src="{{ category.image.url }}" alt="{{ category.name }}" width="300" height="200">
+
+    </div>
+    <div>
+      <h1>{{ category.name }}</h1>
+      <p>{{ category.description }}</p>
+    </div>
+  {% else %}
+    <div>
+      <img src="{% static 'images/banner.jpg' %}" alt="Our products"  width="1350" height="550" >
+    </div>
+    <br>
+    <div>
+      <h1>Our product collections</h1>
+      <p>Products are nicer and smoother, so use with great care.</p>
+    </div>
+  {% endif %}
+
+  <div>
+    <div>
+      {% for product in products %}
+        <div>
+          <div>
+            <a href="{{ product.get_url }}"><img src="{{ product.image.url }}" alt="{{ product.name }}" width="300" height="200"></a>
+            <div>
+              <h4>{{ product.name }}</h4>
+              <p>{{ product.price }}</p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  </div>
+{% endblock %}

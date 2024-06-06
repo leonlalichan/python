@@ -20,7 +20,9 @@ from ecom import settings
 from django.conf import settings
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('',include('ecomapp.urls'))
+    path('',include('ecomapp.urls')),
+    path('search/',include('search.urls')),
+    path('cat/',include('cat.urls')),
 ]
 if settings.DEBUG:
      urlpatterns +=static(settings.STATIC_URL,document_root=settings.STATIC_ROOT)

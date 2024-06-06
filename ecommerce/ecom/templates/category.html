@@ -3,7 +3,7 @@
 
 {% block metadescription %}
   {% if category %}
-    {{ category.description|truncatewords:155 }}
+    {{ category.description|truncatewords_html:155 }}
   {% else %}
     Welcome to our store where you can buy items.
   {% endif %}
@@ -11,51 +11,72 @@
 
 {% block title %}
   {% if category %}
-    {{ category.name }} - A store
+    {{ category.name }} - A Store
   {% else %}
-    See our new collections
+    Our Collections
   {% endif %}
 {% endblock %}
 
 {% block content %}
-  {% if category %}
-    <div>
-      <div>
-        <p><a href="{% url 'ecomapp:allProductCat' %}">Our Product Collections</a></p>
+  <div class="container-fluid">
+    {% if category %}
+      <div class="row justify-content-center my-4">
+        <div class="col-auto">
+          <p><a href="{% url 'ecomapp:allProductCat' %}" class="btn btn-outline-primary">Explore All Collections</a></p>
+        </div>
       </div>
-    </div>
-    <div>
-      <img src="{{ category.image.url }}" alt="{{ category.name }}" width="300" height="200">
-
-    </div>
-    <div>
-      <h1>{{ category.name }}</h1>
-      <p>{{ category.description }}</p>
-    </div>
-  {% else %}
-    <div>
-      <img src="{% static 'images/banner.jpg' %}" alt="Our products"  width="1350" height="550" >
-    </div>
-    <br>
-    <div>
-      <h1>Our product collections</h1>
-      <p>Products are nicer and smoother, so use with great care.</p>
-    </div>
-  {% endif %}
-
-  <div>
-    <div>
-      {% for product in products %}
-        <div>
-          <div>
-            <a href="{{ product.get_url }}"><img src="{{ product.image.url }}" alt="{{ product.name }}" width="300" height="200"></a>
-            <div>
-              <h4>{{ product.name }}</h4>
-              <p>{{ product.price }}</p>
+      <div class="row justify-content-center">
+        <div class="col-auto">
+          <img src="{{ category.image.url }}" alt="{{ category.name }}" class="img-fluid" width="300" height="200">
+        </div>
+      </div>
+      <div class="row justify-content-center mt-4">
+        <div class="col-auto">
+          <h1 class="text-center my_title">{{ category.name }}</h1>
+          <p class="text-center">{{ category.description }}</p>
+        </div>
+      </div>
+    {% else %}
+      <div class="row justify-content-center my-4">
+        <div class="col-auto">
+          <img src="{% static 'images/banner.jpg' %}" alt="Our Products" class="img-fluid" width="100%">
+        </div>
+      </div>
+      <div class="row justify-content-center mt-4">
+        <div class="col-auto">
+          <h1 class="text-center my_title">Our Product Collections</h1>
+          <p class="text-center">Discover our unique and high-quality products.</p>
+        </div>
+      </div>
+    {% endif %}
+<div class="container">
+    <div class="row justify-content-center mt-5">
+      {% for product in products.object_list %}
+        <div class="col-lg-4 col-md-6 col-sm-12">
+          <div class="card mb-3">
+            <a href="{{ product.get_url }}">
+              <img src="{{ product.image.url }}" class="card-img-top" alt="{{ product.name }}">
+            </a>
+            <div class="card-body">
+              <h5 class="card-title">{{ product.name }}</h5>
+              <p class="card-text">{{ product.price }}</p>
             </div>
           </div>
         </div>
       {% endfor %}
     </div>
+  </div>
+   <div class="ma-auto">
+  {% if products.paginator.num_pages > 1 %}
+    <br>
+    <div class="text-center">
+      {% for pg in products.paginator.page_range %}
+        <a href="?page={{ pg }}" class="btn btn-light btn-sm {% if products.number == pg %}active{% endif %}" aria-label="Page {{ pg }}">{{ pg }}</a>
+      {% endfor %}
+    </div>
+  {% endif %}
+</div>
+
+<br>
   </div>
 {% endblock %}

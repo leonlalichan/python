@@ -2,48 +2,50 @@
 {% load static %}
 
 {% block metadescription %}
-
-    {{ product.description|truncatewords:155 }}
-
+    {{ product.description|truncatewords_html:155 }}
 {% endblock %}
 
 {% block title %}
   {% if category %}
     {{ product.name }} - A store
-
   {% endif %}
 {% endblock %}
-{% block content %}
 
-<div>
+{% block content %}
+<div class="container">
+    <div class="row">
+<div class="row my_pod_row_class">
     <div>
-       <p> <a href="{% url 'ecomapp:allProductCat' %}">Home</a> |<a href="{{product.category.get_url}}">{{product.category}}</a>|{{product.name}}</p>
+        <p>
+            <a href="{% url 'ecomapp:allProductCat' %}">Home</a> |
+            <a href="{{ product.category.get_absolute_url }}">{{ product.category }}</a> |
+            {{ product.name }}
+        </p>
     </div>
 </div>
-<br>
-<div>
-    <div>
-        <div>
-            <img src="{{product.image.url}}". alt="{{product.name}}" width="300" height="200">
+<div class="container">
+    <br>
+    <div class="row">
+        <div class="col-md-12 col-sm-12 col-lg-12 text-center">
+            <div style="min-width:18rem;">
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" width="300" height="200">
+            </div>
+        </div>
+        <div class=" col-md-12  col-sm-12  col-ld-12  col-md-12">
+            <div>
+                <h1 class="my_pod_title">{{ product.name }}</h1>
+                <p>${{ product.price }}</p>
+                <p class="my_title"><strong>Product Description</strong></p>
+                <p class="text-justify my_rod_text">{{ product.description }}</p>
+                {% if product.stock <= 0 %}
+                    <p class="text-justify ,my_prod_text"><strong>Out of stock</strong></p>
+                {% else %}
+                    <a class="btn btn-secondary "href="{% url 'cat:add_cart' productid=product.id %}">Add to Cart</a>
+                {% endif %}
+            </div>
         </div>
     </div>
-    <div>
-        <div>
-            <h1>{{product.name}}</h1>
-
-            <p>
-                ${{product.price}}
-            </p>
-            <p>Product Description</p>
-            <p>
-                ${{product.description}}
-            </p>
-            {% if product.stock <= 0 %}
-            <p><b>Out of stock</b></p>
-            {% else %}
-            <a href="">Add to cart</a>
-            {% endif %}
-        </div>
+</div>
     </div>
 </div>
 {% endblock %}

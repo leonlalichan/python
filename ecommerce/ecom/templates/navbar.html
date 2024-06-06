@@ -20,14 +20,18 @@
             {% endfor %}
           </ul>
         </li>
+        {% if item_count > 0 %}
         <li class="nav-item">
-          <a class="nav-link " href="#" >Your cart</a>
+          <a class="nav-link " href="{% url 'cat:cart_detail' %}"  ><i class="fa fa-shopping-cart"></i>({{item_count}})</a>
         </li>
+        {% endif %}
       </ul>
-      <form class="d-flex">
-        <input class="form-control me-2" type="search" placeholder="Search" aria-label="Search">
-        <button class="btn btn-outline-success" type="submit">Search</button>
-      </form>
+      <form class="d-flex" action="{% url 'search:SearchResult' %}" method="get">
+    {% csrf_token %}
+    <input class="form-control me-2" type="search" name="q" placeholder="Search" aria-label="Search">
+    <button class="btn btn-outline-success" type="submit"><i class="fa fa-search"></i></button>
+</form>
+
     </div>
   </div>
 </nav>

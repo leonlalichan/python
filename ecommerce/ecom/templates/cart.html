@@ -1,0 +1,105 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block metadescription %}
+    This is cart page
+{% endblock %}
+
+{% block title %}
+    SB Company PVT LTD
+{% endblock %}
+
+{% block content %}
+<div class="container">
+    <div class="row">
+
+
+{% if not cartitems %}
+<div>
+    <div class="text-center">
+        <br>
+        <h1 class="text-center my_title">
+            Your Shopping Cart is empty
+        </h1>
+        <br>
+        <p class="text-center">
+            Please Click <a href="{% url 'ecomapp:allProductCat' %}">Here</a> to continue
+        </p>
+    </div>
+</div>
+{% else %}
+<div>
+    <div class="text-center">
+         <h1 class="text-center my_title">
+            Your Shopping Cart
+        </h1>
+        <br>
+    </div>
+</div>
+<div class="row mx-auto">
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+        <table class="table my_custom_table">
+            <thead class="my_custom_thread">
+                <tr>
+                    <th colspan="5">Your items</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for cartitem in cartitems %}
+                    <tr>
+                        <td>
+                            <a href="{{ cartitem.product.get_absolute_url }}"><img src="{{ cartitem.product.image.url }}" alt="" class="float-left rounded  " width="100" height="100" ></a>
+                        </td>
+                        <td class="text-left">
+                            {{ cartitem.product.name }}<br>
+                            SKU: {{ cartitem.product.stock }}<br>
+                            Price: ${{ cartitem.product.price }}<br>
+                            Qty : {{ cartitem.quantity }} x ${{ cartitem.product.price }}
+                        </td>
+                        <td>
+                            ${{ cartitem.sub_total }}
+                        </td>
+                        <td>
+                            {% if cartitem.quantity < cartitem.product.stock %}
+                            <a href="{% url 'cat:add_cart' cartitem.product.id %}" class="custom_a"><i class="fa-solid fa-plus custom_icon">&nbsp;</i></a><br>
+
+                                &nbsp;<a href="{% url 'cat:remove' cartitem.product.id %}" class="custom_a"><i class="fa-solid fa-minus custom_icon"></i></a><br>
+                                &nbsp;<a href="{% url 'cat:fullremove' cartitem.product.id %}" class="custom_a"><i class="fa fa-trash custom_icon"></i></a><br>
+                            {% else %}
+                                &nbsp;<a href="{% url 'cat:remove' cartitem.product.id %}" class="custom_a"><i class="fa-solid fa-minus custom_icon"></i></a><br>
+                                &nbsp;<a href="{% url 'cat:fullremove' cartitem.product.id %}" class="custom_a"><i class="fa fa-trash custom_icon"></i></a><br>
+                            {% endif %}
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+
+    <div class="col-12 col-sm-12 col-md-12 col-lg-6 text-center">
+        <table class="table my_custom_table">
+            <thead class="my_custom_thread">
+                <tr>
+                    <th>Checkout</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Please review your shopping cart items before proceeding</td>
+                </tr>
+            <tr>
+                <td class="text-center">
+                    Your total is :<strong>{{ total }}</strong>
+                </td>
+            </tr>
+            </tbody>
+        </table>
+        <div class="mx-auto">
+            <a href="{% url 'ecomapp:allProductCat' %}" class="btn btn-secondary btn-block my_custom_button">Continue</a>
+        </div>
+    </div>
+</div>
+{% endif %}
+        </div>
+</div>
+{% endblock %}
